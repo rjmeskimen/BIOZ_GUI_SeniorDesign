@@ -29,7 +29,6 @@ namespace UART_Senior_Design_Test
         static int xl_length = 56;
         int num_of_sheets = 2;
 
-        int testVariable;
 
         double[] Data_Array = new double[24];
         double[,] data_array = new double[(xl_length * 24) + 1, xl_width];
