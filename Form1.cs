@@ -29,6 +29,8 @@ namespace UART_Senior_Design_Test
         static int xl_length = 56;
         int num_of_sheets = 2;
 
+        bool didItWork;
+
         double[] Data_Array = new double[24];
         double[,] data_array = new double[(xl_length * 24) + 1, xl_width];
         double[,] data_array1 = new double[xl_length, xl_width];
@@ -38,7 +40,7 @@ namespace UART_Senior_Design_Test
         int r = 1, c = 0, sheet_count = 0;
         bool decimal_mode, negative_mode = false;
         bool start_recording = false;
-        int j = 0;
+        int j = 1; //Reece Changed this from 0 to test git
         char switch1, switch2, switch3, switch4;
         int btn_count = 0;
 
