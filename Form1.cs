@@ -751,10 +751,11 @@ namespace UART_Senior_Design_Test
             //      frm.Show();
             //  }
 
-            //  using (Form3 frm3 = new Form3(SaveData))
-            //  {
-            //      frm3.ShowDialog(this);
-            //  }
+            MessageBox.Show("Allow extra time wihen the Excel Sheet loads to allow Excel to finish buffering");
+            using (Form3 frm3 = new Form3(SaveData))
+              {
+                  frm3.ShowDialog(this);
+              }
 
             //data_array[10000, 11];
             //C0 = dftnum table
@@ -774,8 +775,8 @@ namespace UART_Senior_Design_Test
             //C14= samples/cycle = dft / cycles
             //c15= sampling freq = adc clk / (sinc2*sinc3)
 
-            MessageBox.Show("Allow extra time wihen the Excel Sheet loads to allow Excel to finish buffering");
-            SaveData();
+           // MessageBox.Show("Allow extra time wihen the Excel Sheet loads to allow Excel to finish buffering");
+           // SaveData();
 
             
 

@@ -12,21 +12,21 @@ namespace UART_Senior_Design_Test
 {
     public partial class Form3 : Form
     {
-  //      public Action Worker { get; set; }
-  //      public Form3(Action worker)
-  //      {
-  //          InitializeComponent();
-  //          if (worker == null)
-  //              throw new ArgumentException();
-  //          Worker = worker;
-  //
-  //      }
-  //      protected override void OnLoad(EventArgs e)
-  //      {
-  //          base.OnLoad(e);
-  //          Task.Factory.StartNew(Worker).ContinueWith(t => { this.Close(); }, TaskScheduler.FromCurrentSynchronizationContext());
-  //
-  //      }
+        public Action Worker { get; set; }
+        public Form3(Action worker)
+        {
+            InitializeComponent();
+            if (worker == null)
+                throw new ArgumentException();
+            Worker = worker;
+  
+        }
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            Task.Factory.StartNew(Worker).ContinueWith(t => { this.Close(); }, TaskScheduler.FromCurrentSynchronizationContext());
+  
+        }
 
         public Form3()
         {
