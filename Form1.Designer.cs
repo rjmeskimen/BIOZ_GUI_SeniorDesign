@@ -62,6 +62,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label28 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -126,6 +128,8 @@
             this.ExBuffGain_button1 = new System.Windows.Forms.RadioButton();
             this.label26 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.label30 = new System.Windows.Forms.Label();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.label27 = new System.Windows.Forms.Label();
@@ -133,12 +137,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.offset_scroll = new System.Windows.Forms.VScrollBar();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.label30 = new System.Windows.Forms.Label();
             this.panel8 = new System.Windows.Forms.Panel();
-            this.label31 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
             this.panel9 = new System.Windows.Forms.Panel();
             this.label34 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
@@ -242,7 +242,7 @@
             // 
             // clearRTB1
             // 
-            this.clearRTB1.Location = new System.Drawing.Point(922, 891);
+            this.clearRTB1.Location = new System.Drawing.Point(934, 881);
             this.clearRTB1.Name = "clearRTB1";
             this.clearRTB1.Size = new System.Drawing.Size(98, 65);
             this.clearRTB1.TabIndex = 10;
@@ -320,7 +320,7 @@
             // button_export_to_excel
             // 
             this.button_export_to_excel.BackColor = System.Drawing.Color.LimeGreen;
-            this.button_export_to_excel.Location = new System.Drawing.Point(922, 786);
+            this.button_export_to_excel.Location = new System.Drawing.Point(934, 590);
             this.button_export_to_excel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_export_to_excel.Name = "button_export_to_excel";
             this.button_export_to_excel.Size = new System.Drawing.Size(98, 97);
@@ -500,7 +500,7 @@
             this.panel1.Controls.Add(this.richTextBox7);
             this.panel1.Location = new System.Drawing.Point(296, 215);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(633, 183);
+            this.panel1.Size = new System.Drawing.Size(638, 183);
             this.panel1.TabIndex = 42;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -535,9 +535,30 @@
             this.panel2.Controls.Add(this.comboBox1);
             this.panel2.Location = new System.Drawing.Point(294, 410);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(622, 179);
+            this.panel2.Size = new System.Drawing.Size(640, 179);
             this.panel2.TabIndex = 43;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.ForeColor = System.Drawing.SystemColors.Control;
+            this.label33.Location = new System.Drawing.Point(421, 89);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(84, 20);
+            this.label33.TabIndex = 55;
+            this.label33.Text = "TIA - Input";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label31.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.label31.Location = new System.Drawing.Point(25, 25);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(106, 25);
+            this.label31.TabIndex = 41;
+            this.label31.Text = "Switches:";
             // 
             // label20
             // 
@@ -687,9 +708,9 @@
             this.panel3.Controls.Add(this.label3);
             this.panel3.Controls.Add(this.freqButton);
             this.panel3.Controls.Add(this.richTextBox4);
-            this.panel3.Location = new System.Drawing.Point(32, 38);
+            this.panel3.Location = new System.Drawing.Point(16, 38);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(256, 126);
+            this.panel3.Size = new System.Drawing.Size(272, 126);
             this.panel3.TabIndex = 49;
             // 
             // label16
@@ -711,9 +732,9 @@
             this.panel4.Controls.Add(this.comboBox8);
             this.panel4.Controls.Add(this.button1);
             this.panel4.Controls.Add(this.label17);
-            this.panel4.Location = new System.Drawing.Point(30, 177);
+            this.panel4.Location = new System.Drawing.Point(16, 177);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(260, 112);
+            this.panel4.Size = new System.Drawing.Size(274, 112);
             this.panel4.TabIndex = 50;
             this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
             // 
@@ -1315,6 +1336,24 @@
             this.panel7.Size = new System.Drawing.Size(638, 205);
             this.panel7.TabIndex = 112;
             // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.ForeColor = System.Drawing.SystemColors.Control;
+            this.label30.Location = new System.Drawing.Point(379, 88);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(91, 20);
+            this.label30.TabIndex = 119;
+            this.label30.Text = "Offset (mV)";
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Location = new System.Drawing.Point(492, 81);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(128, 31);
+            this.richTextBox2.TabIndex = 118;
+            this.richTextBox2.Text = "";
+            // 
             // label29
             // 
             this.label29.AutoSize = true;
@@ -1390,24 +1429,6 @@
             this.offset_scroll.Value = 1100;
             this.offset_scroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.offset_scroll_Scroll);
             // 
-            // richTextBox2
-            // 
-            this.richTextBox2.Location = new System.Drawing.Point(492, 81);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(128, 31);
-            this.richTextBox2.TabIndex = 118;
-            this.richTextBox2.Text = "";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.ForeColor = System.Drawing.SystemColors.Control;
-            this.label30.Location = new System.Drawing.Point(379, 88);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(91, 20);
-            this.label30.TabIndex = 119;
-            this.label30.Text = "Offset (mV)";
-            // 
             // panel8
             // 
             this.panel8.BackColor = System.Drawing.Color.Firebrick;
@@ -1415,21 +1436,10 @@
             this.panel8.Controls.Add(this.sweep_number_label);
             this.panel8.Controls.Add(this.label1);
             this.panel8.Controls.Add(this.button3);
-            this.panel8.Location = new System.Drawing.Point(32, 309);
+            this.panel8.Location = new System.Drawing.Point(16, 309);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(258, 278);
+            this.panel8.Size = new System.Drawing.Size(274, 278);
             this.panel8.TabIndex = 119;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label31.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label31.Location = new System.Drawing.Point(25, 25);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(106, 25);
-            this.label31.TabIndex = 41;
-            this.label31.Text = "Switches:";
             // 
             // label32
             // 
@@ -1441,16 +1451,6 @@
             this.label32.Size = new System.Drawing.Size(148, 25);
             this.label32.TabIndex = 108;
             this.label32.Text = "FULL SWEEP";
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.ForeColor = System.Drawing.SystemColors.Control;
-            this.label33.Location = new System.Drawing.Point(421, 89);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(84, 20);
-            this.label33.TabIndex = 55;
-            this.label33.Text = "TIA - Input";
             // 
             // panel9
             // 
@@ -1467,7 +1467,7 @@
             this.panel9.Controls.Add(this.pos_ref);
             this.panel9.Location = new System.Drawing.Point(16, 595);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(900, 434);
+            this.panel9.Size = new System.Drawing.Size(918, 434);
             this.panel9.TabIndex = 120;
             // 
             // label34
