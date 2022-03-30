@@ -523,86 +523,125 @@ namespace UART_Senior_Design_Test
 
             }
         }
+        static int DFT_TABLE = 0;
+        static int SINC2_TABLE = 1;
+        static int SINC3_TABLE =2;
+        static int DFT_SRC =3;
+        static int PWR_MOD =4;
+        static int VOLT_MAG =5;
+        static int VOLT_PHASE =6;
+        static int CURRENT_MAG =7;
+        static int CURRENT_PHASE =8;
+        static int FREQ_RESULT =9;
+        static int MAG_RESULT =10;
+        static int PHASE_RESULT =11;
+        static int DFT_VALUE =12;
+        static int SINC2_VALUE =13;
+        static int SINC3_VALUE =14;
+        static int CYCLES =15;
+        static int SAMP_CYCLE =16;
+        static int SAMP_FREQ =17;
+
         private void SaveData()
         {
+            //data_array[1400, 11];
+            //C0 = dftnum table
+            //C1 = sinc2 table
+            //C2 = sinc3 table
+            //C3 = dft src
+            //C4 = pwr mod
+            //C5 = Volt Mag
+            //C6 = Volt phase
+            //C7 = Curr Mag
+            //C8 = Curr phase
+            //C9 = freq result
+            //C10 = Mag result
+            //C11 = phase result
+            //C12 = translated dft value
+            //C13 = translated sinc2 value
+            //C14= translated sinc3 value
+            //C15= calculated cycles = dft*sinc2*sinc3 / adc Clk
+            //C16= samples/cycle = dft / cycles
+            //c17= sampling freq = adc clk / (sinc2*sinc3)
+            
             
 
             for (int a = 1; a < xl_length * 24 + 1; a++)                                                                              //assign column 11 to the sinc2 value
             {
-                switch (data_array[a, 4])
+                switch (data_array[a, SINC2_TABLE])
                 {
                     case 0:
-                        data_array[a, 11] = 1;
+                        data_array[a, SINC2_VALUE] = 1;
                         break;
                     case 1:
-                        data_array[a, 11] = 22;
+                        data_array[a, SINC2_VALUE] = 22;
                         break;
                     case 2:
-                        data_array[a, 11] = 44;
+                        data_array[a, SINC2_VALUE] = 44;
                         break;
                     case 3:
-                        data_array[a, 11] = 89;
+                        data_array[a, SINC2_VALUE] = 89;
                         break;
                     case 4:
-                        data_array[a, 11] = 178;
+                        data_array[a, SINC2_VALUE] = 178;
                         break;
                     case 5:
-                        data_array[a, 11] = 267;
+                        data_array[a, SINC2_VALUE] = 267;
                         break;
                     case 6:
-                        data_array[a, 11] = 533;
+                        data_array[a, SINC2_VALUE] = 533;
                         break;
                     case 7:
-                        data_array[a, 11] = 640;
+                        data_array[a, SINC2_VALUE] = 640;
                         break;
                     case 8:
-                        data_array[a, 11] = 667;
+                        data_array[a, SINC2_VALUE] = 667;
                         break;
                     case 9:
-                        data_array[a, 11] = 800;
+                        data_array[a, SINC2_VALUE] = 800;
                         break;
                     case 10:
-                        data_array[a, 11] = 889;
+                        data_array[a, SINC2_VALUE] = 889;
                         break;
                     case 11:
-                        data_array[a, 11] = 1067;
+                        data_array[a, SINC2_VALUE] = 1067;
                         break;
                     case 12:
-                        data_array[a, 11] = 1333;
+                        data_array[a, SINC2_VALUE] = 1333;
                         break;
                     default:
-                        data_array[a, 11] = 0;
+                        data_array[a, SINC2_VALUE] = 0;
                         break;
                 }
                 //Now do the same for the sinc3
-                switch (data_array[a, 5])
+                switch (data_array[a, SINC3_TABLE])
                 {
                     case 0:
-                        data_array[a, 15] = 2;
+                        data_array[a, SINC3_VALUE] = 2;
                         break;
                     case 1:
-                        data_array[a, 15] = 4;
+                        data_array[a, SINC3_VALUE] = 4;
                         break;
                     case 2:
-                        data_array[a, 15] = 5;
+                        data_array[a, SINC3_VALUE] = 5;
                         break;
                     default:
-                        data_array[a, 15] = 0;
+                        data_array[a, SINC3_VALUE] = 0;
                         break;
                 }
-            }                                                            //assign column 9 to the sinc2 value & C10 to the sinc3 value
+            }                                                           //assign column 9 to the sinc2 value & C10 to the sinc3 value
 
-            for (int a = 1, q = 10; a < xl_length * 24 + 1; a++)                                           //assign column 8 to the translated DFT value
+            for (int a = 1; a < xl_length * 24 + 1; a++)                                           //assign column 12 to the translated DFT value
             {
                 //double dftnum_example = 4 * Math.Exp(.6931475*dft_table);
-                data_array[a, q] = 4 * Math.Exp(.6931475 * data_array[a, q - 10]);                // DFT value  = 4*e^.6931475*dft   ::: start at row 0, column 8
-            }                                                     //assign column 8 to the translated DFT value
+                data_array[a, DFT_VALUE] = 4 * Math.Exp(.6931475 * data_array[a, DFT_TABLE]);                // DFT value  = 4*e^.6931475*dft   ::: start at row 0, column 12
+            }                                                     //assign column 12 to the translated DFT value
 
             for (int a = 1; a < xl_length * 24 + 1; a++)
             {
-                data_array[a, 13] = data_array[a, 8] * data_array[a, 9] * data_array[a, 10] * data_array[a, 5] / 800000;       //calculate total cycles
-                data_array[a, 14] = data_array[a, 8] / data_array[a, 11];                                   //calculate samples per cycle
-                data_array[a, 15] = 800000 / data_array[a, 9] * data_array[a, 10];                          //calculate sampling freq
+                data_array[a, 15] = data_array[a, SINC2_VALUE] * data_array[a, SINC3_VALUE] * data_array[a, DFT_VALUE] * data_array[a, FREQ_RESULT] / 800000;       //calculate total cycles ==> calculated cycles = dft*sinc2*sinc3 / adc Clk
+                data_array[a, 16] = data_array[a, DFT_VALUE] / data_array[a, CYCLES];                                   //calculate samples per cycle
+                data_array[a, SAMP_FREQ] = 800000 / data_array[a, SINC2_VALUE] * data_array[a, SINC3_VALUE];                          //calculate sampling freq
             }                                                            //assign column 11, 12, 13 to cycles, samp/cycle, samp freq
 
             //create an array of 24 excel worksheets 
@@ -667,8 +706,8 @@ namespace UART_Senior_Design_Test
 
                 //Add Borders
                 {
-                    Excel.Range border_rng5 = ws[k].Range["J1:F57"];       //Phase
-                    Excel.Range border_rng6 = ws[k].Range["F1:J1"];       //All heading
+                    Excel.Range border_rng5 = ws[k].Range["L1:F57"];       //Phase
+                    Excel.Range border_rng6 = ws[k].Range["F1:L1"];       //All heading
                     Excel.Borders border1 = border_rng5.Borders;
                     border1 = border_rng5.Borders;
                     border1.LineStyle = Excel.XlLineStyle.xlContinuous;
@@ -691,7 +730,7 @@ namespace UART_Senior_Design_Test
                     ws[k].Cells[1, 4] = "DFT Src";
                     ws[k].Cells[1, 5] = "PwrMod_Table";
                     ws[k].Cells[1, 6] = "Voltage Magnitude";
-                    ws[k].Cells[1, 7] = "VOltage Phase";
+                    ws[k].Cells[1, 7] = "Voltage Phase";
                     ws[k].Cells[1, 8] = "Current Magnitude";
                     ws[k].Cells[1, 9] = "Current Phase";
                     ws[k].Cells[1, 10] = "Frequency";
@@ -829,10 +868,10 @@ namespace UART_Senior_Design_Test
             //  }
 
             MessageBox.Show("Allow extra time wihen the Excel Sheet loads to allow Excel to finish buffering");
-            using (Form3 frm3 = new Form3(SaveData))
-              {
-                  frm3.ShowDialog(this);
-              }
+           // using (Form3 frm3 = new Form3(SaveData))
+           //   {
+           //       frm3.ShowDialog(this);
+           //   }
 
             //data_array[10000, 11];
             //C0 = dftnum table
@@ -841,19 +880,21 @@ namespace UART_Senior_Design_Test
             //C3 = dft src
             //C4 = pwr mod
             //C5 = Volt Mag
-            //C6 = Curr Mag
-            //C7 = freq result
-            //C8 = Mag result
-            //C9 = phase result
-            //C10 = translated dft value
-            //C11 = translated sinc2 value
-            //C12= translated sinc3 value
-            //C13= calculated cycles = dft*sinc2*sinc3 / adc Clk
-            //C14= samples/cycle = dft / cycles
-            //c15= sampling freq = adc clk / (sinc2*sinc3)
+            //C6 = Volt phase
+            //C7 = Curr Mag
+            //C8 = Curr phase
+            //C9 = freq result
+            //C10 = Mag result
+            //C11 = phase result
+            //C12 = translated dft value
+            //C13 = translated sinc2 value
+            //C14= translated sinc3 value
+            //C15= calculated cycles = dft*sinc2*sinc3 / adc Clk
+            //C16= samples/cycle = dft / cycles
+            //c17= sampling freq = adc clk / (sinc2*sinc3)
 
            // MessageBox.Show("Allow extra time wihen the Excel Sheet loads to allow Excel to finish buffering");
-           // SaveData();
+            SaveData();
 
             
 

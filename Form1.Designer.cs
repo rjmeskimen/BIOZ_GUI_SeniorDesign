@@ -1084,7 +1084,7 @@
             this.V_label1.AutoSize = true;
             this.V_label1.Font = new System.Drawing.Font("Modern No. 20", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.V_label1.ForeColor = System.Drawing.Color.Red;
-            this.V_label1.Location = new System.Drawing.Point(308, 687);
+            this.V_label1.Location = new System.Drawing.Point(301, 740);
             this.V_label1.Name = "V_label1";
             this.V_label1.Size = new System.Drawing.Size(49, 31);
             this.V_label1.TabIndex = 95;
@@ -1096,7 +1096,7 @@
             this.V_label2.AutoSize = true;
             this.V_label2.Font = new System.Drawing.Font("Modern No. 20", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.V_label2.ForeColor = System.Drawing.Color.Red;
-            this.V_label2.Location = new System.Drawing.Point(794, 815);
+            this.V_label2.Location = new System.Drawing.Point(792, 873);
             this.V_label2.Name = "V_label2";
             this.V_label2.Size = new System.Drawing.Size(46, 31);
             this.V_label2.TabIndex = 96;
@@ -1108,7 +1108,7 @@
             this.I_label1.AutoSize = true;
             this.I_label1.Font = new System.Drawing.Font("Modern No. 20", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.I_label1.ForeColor = System.Drawing.Color.Red;
-            this.I_label1.Location = new System.Drawing.Point(318, 810);
+            this.I_label1.Location = new System.Drawing.Point(300, 869);
             this.I_label1.Name = "I_label1";
             this.I_label1.Size = new System.Drawing.Size(41, 31);
             this.I_label1.TabIndex = 97;
@@ -1120,7 +1120,7 @@
             this.I_label2.AutoSize = true;
             this.I_label2.Font = new System.Drawing.Font("Modern No. 20", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.I_label2.ForeColor = System.Drawing.Color.Red;
-            this.I_label2.Location = new System.Drawing.Point(794, 687);
+            this.I_label2.Location = new System.Drawing.Point(794, 738);
             this.I_label2.Name = "I_label2";
             this.I_label2.Size = new System.Drawing.Size(38, 31);
             this.I_label2.TabIndex = 98;
