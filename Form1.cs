@@ -29,7 +29,7 @@ namespace UART_Senior_Design_Test
         double updatevalue;
         double decimal_updatevalue;
 
-        static int xl_width = 16;
+        static int xl_width = 18;
         static int xl_length = 56;
         int num_of_sheets = 2;
 
@@ -691,16 +691,18 @@ namespace UART_Senior_Design_Test
                     ws[k].Cells[1, 4] = "DFT Src";
                     ws[k].Cells[1, 5] = "PwrMod_Table";
                     ws[k].Cells[1, 6] = "Voltage Magnitude";
-                    ws[k].Cells[1, 7] = "Current Magnitude";
-                    ws[k].Cells[1, 8] = "Frequency";
-                    ws[k].Cells[1, 9] = "Magnitude";
-                    ws[k].Cells[1, 10] = "Phase";
-                    ws[k].Cells[1, 11] = "DFT Num";
-                    ws[k].Cells[1, 12] = "Sinc2";
-                    ws[k].Cells[1, 13] = "Sinc3";
-                    ws[k].Cells[1, 14] = "Cycles";
-                    ws[k].Cells[1, 15] = "Samples/Cycle";
-                    ws[k].Cells[1, 16] = "Sampling Freq";
+                    ws[k].Cells[1, 7] = "VOltage Phase";
+                    ws[k].Cells[1, 8] = "Current Magnitude";
+                    ws[k].Cells[1, 9] = "Current Phase";
+                    ws[k].Cells[1, 10] = "Frequency";
+                    ws[k].Cells[1, 11] = "Magnitude";
+                    ws[k].Cells[1, 12] = "Phase";
+                    ws[k].Cells[1, 13] = "DFT Num";
+                    ws[k].Cells[1, 14] = "Sinc2";
+                    ws[k].Cells[1, 15] = "Sinc3";
+                    ws[k].Cells[1, 16] = "Cycles";
+                    ws[k].Cells[1, 17] = "Samples/Cycle";
+                    ws[k].Cells[1, 18] = "Sampling Freq";
 
                 }       //set the excel sheet labels
 
@@ -786,17 +788,20 @@ namespace UART_Senior_Design_Test
 
                 //Copy data from each sheet to a main sheet
                 //string columnLetter = ColumnIndexToColumnLetter(100); // returns "CV"
-                string columnLetter1 = ColumnIndexToColumnLetter((k - 1) * 9 + 1); // returns the column string value
-                string columnLetter2 = ColumnIndexToColumnLetter((k - 1) * 9 + 5); // returns the column string value
-                Excel.Range from = ws[k].get_Range("F2", "J56");
+                string columnLetter1 = ColumnIndexToColumnLetter((k - 1) * 11 + 1); // returns the column string value
+                string columnLetter2 = ColumnIndexToColumnLetter((k - 1) * 11 + 7); // returns the column string value
+                Excel.Range from = ws[k].get_Range("F2", "L56");
                 Excel.Range to = ws26.get_Range(columnLetter1 + "31", columnLetter1 + "85");
                 from.Copy(to);
 
-                ws26.Cells[30, (k - 1) * 9 + 1] = electrode_label + " Voltage";
-                ws26.Cells[30, (k - 1) * 9 + 2] = electrode_label + " Current";
-                ws26.Cells[30, (k - 1) * 9 + 3] = electrode_label + " Freq";
-                ws26.Cells[30, (k - 1) * 9 + 4] = electrode_label + " Magnitude";
-                ws26.Cells[30, (k - 1) * 9 + 5] = electrode_label + " Phase";
+                ws26.Cells[29, (k - 1) * 11 + 1] = electrode_label;
+                ws26.Cells[30, (k - 1) * 11 + 1] =  "|V|";
+                ws26.Cells[30, (k - 1) * 11 + 2] =  "V Phase";
+                ws26.Cells[30, (k - 1) * 11 + 3] =  "|I|";
+                ws26.Cells[30, (k - 1) * 11 + 4] =  "I Phase";
+                ws26.Cells[30, (k - 1) * 11 + 5] =  "Freq";
+                ws26.Cells[30, (k - 1) * 11 + 6] =  "|Z|";
+                ws26.Cells[30, (k - 1) * 11 + 7] =  "Z Phase";
                 
 
             }
@@ -2186,40 +2191,40 @@ namespace UART_Senior_Design_Test
             switch (k)
             {
                 case 1:
-                    electrode_label = "E0 E1";
+                    electrode_label = "A0B1";
                     break;
                 case 2:
-                    electrode_label = "E0 E2";
+                    electrode_label = "A0B2";
                     break;
                 case 3:
-                    electrode_label = "E0 E3";
-                    break;
-                case 4:
-                    electrode_label = "E1 E0";
-                    break;
-                case 5:
-                    electrode_label = "E1 E2";
-                    break;
-                case 6:
-                    electrode_label = "E1 E3";
-                    break;
-                case 7:
-                    electrode_label = "E2 E0";
-                    break;
-                case 8:
-                    electrode_label = "E2 E1";
-                    break;
-                case 9:
-                    electrode_label = "E2 E3";
-                    break;
-                case 10:
-                    electrode_label = "E3 E0";
-                    break;
-                case 11:
-                    electrode_label = "E3 E1";
-                    break;
-                case 12:
-                    electrode_label = "E3 E2";
+                    electrode_label = "A0B3";
+                    break;               
+                case 4:                  
+                    electrode_label = "A1B0";
+                    break;               
+                case 5:                  
+                    electrode_label = "A1B2";
+                    break;               
+                case 6:                  
+                    electrode_label = "A1B3";
+                    break;               
+                case 7:                  
+                    electrode_label = "A2B0";
+                    break;               
+                case 8:                  
+                    electrode_label = "A2B1";
+                    break;               
+                case 9:                  
+                    electrode_label = "A2B3";
+                    break;               
+                case 10:                 
+                    electrode_label = "A3B0";
+                    break;               
+                case 11:                 
+                    electrode_label = "A3B1";
+                    break;               
+                case 12:                 
+                    electrode_label = "A3B2";
                     break;
             }
 
