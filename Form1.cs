@@ -13,6 +13,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Media;
 using NPOI.SS.UserModel;
+using ZedGraph;
+
 
 
 namespace UART_Senior_Design_Test
@@ -44,27 +46,91 @@ namespace UART_Senior_Design_Test
         int btn_count = 0;
 
         private Bluetooth_Settings _setting = new Bluetooth_Settings();                        //create an instance of the Bluetooth_Settings
+        private Form4 _helpmenue = new Form4();
         public string frequency;
-        double dacgain, exbuffgain = 0;
+        double dacgain = 1;
+        double exbuffgain = 2;
         char dacgaincode, exbuffgaincode = '0';
-        double finalpk2pk = 0;
+        double finalpk2pk = 300;
 
+        GraphPane graphPane;
 
+        
         public Form1()                                                                         //Initialize the form
         {
             InitializeComponent();
             STOCK_img.BringToFront();
             bring_labels_to_front();
+            richTextBox2.Text = Convert.ToString(offset_scroll.Value);
             pk2pk_textbox.Text = "800";
+            //graphPane = zedGraphControl1.GraphPane;
+           // DrawSine();
+
 
         }
+
+        double excitationOffset = 1100;
+
+        
+
+
+        private void DrawSine()
+        {
+            graphPane = zedGraphControl1.GraphPane;
+            PointPairList _pointPairList = new PointPairList();
+
+            _pointPairList.Clear();
+            for (int _angle = 0; _angle <= 360; _angle = _angle +10)
+            {
+                double _x = _angle;
+                double _y = (((finalpk2pk /2) * (Math.Sin(Math.PI * _x / 180.0)) + excitationOffset)) ;
+                double _y2 = (Math.Sin(Math.PI * _x / 180.0));
+
+                if (_y >= 2400)     //if saturates at 2.4V
+                {
+                    _y = 2400;
+                }
+                else if (_y <= 200)
+                {
+                    _y = 200;   
+                }
+                else
+                {
+                    //y does not saturate
+                }
+                
+                PointPair _pointPair = new PointPair(_x, _y);
+
+                _pointPairList.Add(_pointPair);
+                zedGraphControl1.Invalidate();
+            }
+
+            {
+                //double _x
+                //double _y2 =
+                //PointPair _pointPairMax = new PointPair(_x, _y);
+            }
+
+                graphPane.CurveList.Clear();
+                LineItem _lineItem = graphPane.AddCurve("Excitation Output", _pointPairList, Color.Red, SymbolType.None);
+            //LineItem _lineItem_max = graphPane.AddCurve("Excitation Output", _pointPairList_maxline, Color.Red, SymbolType.None);
+            //LineItem _lineItem_min = graphPane.AddCurve("Excitation Output", _pointPairList_minline, Color.Red, SymbolType.None);
+
+            graphPane.Title.Text = "Excitation Output";                 //set the title and axis'
+                //graphPane.XAxis.Title.Text = "Time (ms)";
+                graphPane.YAxis.Title.Text = "Voltage (mV)";
+                zedGraphControl1.AxisChange();
+                zedGraphControl1.PerformAutoScale();
+            
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
         private void bluetoothSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            
         }
         private void cOMPortToolStripMenuItem_Click(object sender, EventArgs e)                //open tool strip form
         {
@@ -1555,6 +1621,7 @@ namespace UART_Senior_Design_Test
 
             finalpk2pk = Convert.ToDouble(pk2pk_textbox.Text) * dacgain * exbuffgain;
             final_pk2pk_textbox.Text = Convert.ToString(finalpk2pk);
+            DrawSine();
         }
 
         private void ExBuffGain_button1_CheckedChanged(object sender, EventArgs e)
@@ -1572,6 +1639,7 @@ namespace UART_Senior_Design_Test
 
             finalpk2pk = Convert.ToDouble(pk2pk_textbox.Text) * dacgain * exbuffgain;
             final_pk2pk_textbox.Text = Convert.ToString(finalpk2pk);
+            DrawSine();
         }
 
         private void label28_Click(object sender, EventArgs e)
@@ -1582,6 +1650,60 @@ namespace UART_Senior_Design_Test
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void helpMenuToolStripMenuItem_Click(object sender, EventArgs e)        //clicked on the help menue
+        {
+            _helpmenue.Show();
+        }
+
+        private void label16_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ExBuffGain_button2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ExBuffGain_button1.Checked)
+            {
+                exbuffgain = 0.25;
+                exbuffgaincode = '1';              //this will be sent to the chip so it knows what to set the ex buff gain to
+            }
+            if (ExBuffGain_button2.Checked)
+            {
+                exbuffgain = 2;
+                exbuffgaincode = '2';
+            }
+
+            finalpk2pk = Convert.ToDouble(pk2pk_textbox.Text) * dacgain * exbuffgain;
+            final_pk2pk_textbox.Text = Convert.ToString(finalpk2pk);
+            DrawSine();
+        }
+
+        private void offset_scroll_Scroll(object sender, ScrollEventArgs e)
+        {
+            excitationOffset = offset_scroll.Value;
+            richTextBox2.Text = Convert.ToString( offset_scroll.Value);
+            DrawSine();
+
+        }
+
+        private void dac_gain_button2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (dac_gain_button1.Checked)
+            {
+                dacgain = 0.2;
+                dacgaincode = '2';
+            }
+            if (dac_gain_button2.Checked)
+            {
+                dacgain = 1;
+                dacgaincode = '1';
+            }
+
+            finalpk2pk = Convert.ToDouble(pk2pk_textbox.Text) * dacgain * exbuffgain;
+            final_pk2pk_textbox.Text = Convert.ToString(finalpk2pk);
+            DrawSine();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -1659,6 +1781,7 @@ namespace UART_Senior_Design_Test
                 finalpk2pk = Convert.ToDouble(pk2pk_textbox.Text) * dacgain * exbuffgain;       
                 final_pk2pk_textbox.Text = Convert.ToString(finalpk2pk);
             }
+            DrawSine();
            
         }
 
