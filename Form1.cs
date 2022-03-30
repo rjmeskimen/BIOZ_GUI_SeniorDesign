@@ -54,6 +54,8 @@ namespace UART_Senior_Design_Test
         char dacgaincode, exbuffgaincode = '0';
         double finalpk2pk = 300;
 
+
+
         GraphPane graphPane;
 
         
@@ -65,6 +67,9 @@ namespace UART_Senior_Design_Test
             richTextBox2.Text = Convert.ToString(offset_scroll.Value);
             pk2pk_textbox.Text = "800";
             //graphPane = zedGraphControl1.GraphPane;
+
+            finalpk2pk = Convert.ToDouble(pk2pk_textbox.Text) * dacgain * exbuffgain;
+            final_pk2pk_textbox.Text = Convert.ToString(finalpk2pk);
             DrawSine();
 
 
