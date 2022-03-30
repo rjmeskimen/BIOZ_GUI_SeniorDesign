@@ -65,7 +65,7 @@ namespace UART_Senior_Design_Test
             richTextBox2.Text = Convert.ToString(offset_scroll.Value);
             pk2pk_textbox.Text = "800";
             //graphPane = zedGraphControl1.GraphPane;
-           // DrawSine();
+            DrawSine();
 
 
         }
