@@ -293,17 +293,7 @@ namespace UART_Senior_Design_Test
                 Extract_each_Character2(buffer, count);                                        //call the function to exract each character
             }
         }
-        private void Extract_each_Character(byte[] buffer, int count)                          //extract characters from the 1 serial port and proccess the data as needed
-        {
-            byte data;
-            for (int i = 0; i < count; i++)
-            {
-                data = buffer[i];
-                //Selects 
-                this.Invoke(new EventHandler(update_richtextbox1), new object[] { data });
-                this.Invoke(new EventHandler(Parse_My_Data), new object[] { data });
-            }
-        }
+
         private void Extract_each_Character2(byte[] buffer, int count)                         //extract characters from the 2 serial port and Proccess the controls as needed
         {
             bool recordFreq = false;
@@ -358,6 +348,18 @@ namespace UART_Senior_Design_Test
 
             }
         }
+        private void Extract_each_Character(byte[] buffer, int count)                          //extract characters from the 1 serial port and proccess the data as needed
+        {
+            byte data;
+            for (int i = 0; i < count; i++)
+            {
+                data = buffer[i];
+                //Selects 
+                this.Invoke(new EventHandler(update_richtextbox1), new object[] { data });
+                this.Invoke(new EventHandler(Parse_My_Data), new object[] { data });
+            }
+        }
+        
         private void update_richtextbox6(object sender, EventArgs e)                           //update when Data is recieved from Serial Port2
         {
             //  richTextBox6.
