@@ -31,13 +31,15 @@ namespace UART_Senior_Design_Test
 
         static int xl_width = 18;
         static int xl_length = 56;
-        int num_of_sheets = 2;
+        int num_of_sheets = 2;          //this value gets incremente after each sweep
 
         double[] Data_Array = new double[24];
         double[,] data_array = new double[(xl_length * 24) + 1, xl_width];
         double[,] data_array1 = new double[xl_length, xl_width];
         double[,] data_array2 = new double[xl_length, xl_width];
         double[,] data_array3 = new double[xl_length, xl_width];
+
+        double[,] average_data_array = new double[2, 720];
 
         int r = 1, c = 0, sheet_count = 0;
         bool decimal_mode, negative_mode = false;
@@ -630,23 +632,23 @@ namespace UART_Senior_Design_Test
                         data_array[a, SINC3_VALUE] = 0;
                         break;
                 }
-            }                                                           //assign column 9 to the sinc2 value & C10 to the sinc3 value
+            }                                                           //assign column to the sinc2 value & C10 to the sinc3 value
 
             for (int a = 1; a < xl_length * 24 + 1; a++)                                           //assign column 12 to the translated DFT value
             {
                 //double dftnum_example = 4 * Math.Exp(.6931475*dft_table);
                 data_array[a, DFT_VALUE] = 4 * Math.Exp(.6931475 * data_array[a, DFT_TABLE]);                // DFT value  = 4*e^.6931475*dft   ::: start at row 0, column 12
-            }                                                     //assign column 12 to the translated DFT value
+            }                                                     //assign column  to the translated DFT value
 
             for (int a = 1; a < xl_length * 24 + 1; a++)
             {
                 data_array[a, 15] = data_array[a, SINC2_VALUE] * data_array[a, SINC3_VALUE] * data_array[a, DFT_VALUE] * data_array[a, FREQ_RESULT] / 800000;       //calculate total cycles ==> calculated cycles = dft*sinc2*sinc3 / adc Clk
                 data_array[a, 16] = data_array[a, DFT_VALUE] / data_array[a, CYCLES];                                   //calculate samples per cycle
                 data_array[a, SAMP_FREQ] = 800000 / data_array[a, SINC2_VALUE] * data_array[a, SINC3_VALUE];                          //calculate sampling freq
-            }                                                            //assign column 11, 12, 13 to cycles, samp/cycle, samp freq
+            }                                                            //assign columns to cycles, samp/cycle, samp freq
 
             //create an array of 24 excel worksheets 
-            Excel.Worksheet[] ws = new Excel.Worksheet[25];
+            Excel.Worksheet[] ws = new Excel.Worksheet[26];
 
             //create a missing value object
             object misValue = System.Reflection.Missing.Value;                                           //for graphing
@@ -669,6 +671,9 @@ namespace UART_Senior_Design_Test
 
             //instantiate another worksheet object to hold ALL the cared about data on one sheet
             Excel.Worksheet ws26 = (Excel.Worksheet)wb.Worksheets.Add();                                    //Create a worksheet for all of the graphs on one sheet
+
+            //instantiate a new worksheet for the data to be organized of such for Machine learning
+            Excel.Worksheet wsML = (Excel.Worksheet)wb.Worksheets.Add();                                    //Create a worksheet for all of the graphs on one sheet
 
             //FOR all 25 Worksheets in Workbook1
             for (int k = 1; k < num_of_sheets; k++)
@@ -701,9 +706,82 @@ namespace UART_Senior_Design_Test
                 }
 
 
+                //FOR every sheet, do 5 itmes(one for each section of the sweep), sum and average the 10 elements and store into respective column of the average data array
+                //for all 5 sections in one 1-200k sweep. find the averages for each segment of 10 frequency points
+                for (int m = 1; m < 6; m++)
+                {
+
+
+                    //set each column of the averagedataarray respectiveley. 
+                    for (int n = 0; n < 10; n++)
+                    {
+                        average_data_array[1, (m * 6 - 5)+(30*(k-1))] += data_array1[(m-1)*10 + n + 1, 5];                   //take the summation f the Volt Mag
+                        average_data_array[1, (m * 6 - 4)+(30*(k-1))] += data_array1[(m-1)*10 + n + 1, 6];                  //take the summation of the Volt phase
+                        average_data_array[1, (m * 6 - 3)+(30*(k-1))] += data_array1[(m-1)*10 + n + 1, 7];                  //take the summation of the Current Mag
+                        average_data_array[1, (m * 6 - 2)+(30*(k-1))] += data_array1[(m-1)*10 + n + 1, 8];                   //take the summation  of the Current phase
+                        average_data_array[1, (m * 6 - 1)+(30*(k-1))] += data_array1[(m-1)*10 + n + 1, 10];                  //take the summation  of the Z Magnitude 
+                        average_data_array[1, (m * 6 - 0)+(30*(k-1))] += data_array1[(m-1)*10 + n + 1, 11];                  //take the summation  of the Z phase
+
+                        wsML.Columns[(m * 6 - 5) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 4) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 3) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 2) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 1) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 0) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+
+                        if (n == 9)
+                        {
+                            average_data_array[1, (m * 6 - 5)+(30*(k-1))] = average_data_array[1, (m*6-5)+(30*(k-1))]     /  n + 1;        //take the average of the Volt Mag
+                            average_data_array[1, (m * 6 - 4)+(30*(k-1))] = average_data_array[1, (m * 6 - 4)+(30*(k-1))] /  n + 1;        //take the average of the Volt phase
+                            average_data_array[1, (m * 6 - 3)+(30*(k-1))] = average_data_array[1, (m * 6 - 3)+(30*(k-1))] /  n + 1;        //take the average of the Current Mag
+                            average_data_array[1, (m * 6 - 2)+(30*(k-1))] = average_data_array[1, (m * 6 - 2)+(30*(k-1))] /  n + 1;        //take the average of the Current phase
+                            average_data_array[1, (m * 6 - 1)+(30*(k-1))] = average_data_array[1, (m * 6 - 1)+(30*(k-1))] /  n + 1;        //take the average of the Z Magnitude 
+                            average_data_array[1, (m * 6 - 0)+(30*(k-1))] = average_data_array[1, (m * 6 - 0)+(30*(k-1))] /  n + 1;        //take the average of the Z phase
+                        }
+                    }
+
+                        string section;
+                        section = getSectionOfSweep(m);
+                        wsML.Cells[3, (m * 6 - 5) + (30 * (k - 1))+1] = "avg |V|" + section;
+                        wsML.Cells[3, (m * 6 - 4) + (30 * (k - 1))+1] = "avg V phase " + section;
+                        wsML.Cells[3, (m * 6 - 3) + (30 * (k - 1))+1] = "avg |I| " + section;
+                        wsML.Cells[3, (m * 6 - 2) + (30 * (k - 1))+1] = "avg I Phase " + section;
+                        wsML.Cells[3, (m * 6 - 1) + (30 * (k - 1))+1] = "avg |Z| " + section;
+                        wsML.Cells[3, (m * 6 - 0) + (30 * (k - 1))+1] = "avg Z Phase " + section;
+
+                    //add border to the ML sheet
+                    {
+                        string columnLetter3 = ColumnIndexToColumnLetter((m - 1) * 12 + 2); // returns the column string value
+                        string columnLetter4 = ColumnIndexToColumnLetter((m - 1) * 12 + 7); // returns the column string value
+                        Excel.Range ml_border_range = wsML.get_Range(columnLetter3 + "2", columnLetter4 + "3");
+                        Excel.Borders borderML = ml_border_range.Borders;
+                        borderML.LineStyle = Excel.XlLineStyle.xlContinuous;
+                        borderML.Weight = Excel.XlBorderWeight.xlThick;
+                        borderML.Color = Color.Blue;
+
+                        string columnLetter5 = ColumnIndexToColumnLetter((m - 1) * 12 + 8); // returns the column string value
+                        string columnLetter6 = ColumnIndexToColumnLetter((m - 1) * 12 + 13); // returns the column string value
+                        Excel.Range ml_border_range2 = wsML.get_Range(columnLetter5 + "2", columnLetter6 + "3");
+                        Excel.Borders borderML2 = ml_border_range2.Borders;
+                        borderML2.LineStyle = Excel.XlLineStyle.xlContinuous;
+                        borderML2.Weight = Excel.XlBorderWeight.xlThick;
+                        borderML2.Color = Color.Black;
+                    }
+
+
+                }
+
+                
+
                 //instantiate a range 
                 Excel.Range rng = ws[k].Cells.get_Resize(data_array1.GetLength(0), data_array1.GetLength(1));       //get the range
                 rng.Value = data_array1;                                                                         //set the range to my data array 
+
+                //instantiate a range for the average data set
+                  Excel.Range avg_rng = wsML.Cells.get_Resize(average_data_array.GetLength(0), average_data_array.GetLength(1));       //get the range
+                  avg_rng.Value = average_data_array;
+
+
 
                 //Add Borders
                 {
@@ -719,6 +797,8 @@ namespace UART_Senior_Design_Test
                     border2.Weight = Excel.XlBorderWeight.xlThick;
                     border2.Color = Color.Red;
                 }
+
+                
 
                 //make all sheets visable
                 ws[k].Visible = Excel.XlSheetVisibility.xlSheetVisible;
@@ -810,21 +890,7 @@ namespace UART_Senior_Design_Test
                 // rng.Value = ws[k].Range["J1:F57"];
 
 
-              //for (int l = 1; l < xl_length + 2; l++)
-              //{
-              //    ws26.Cells[30 + l, ((k - 1) * 6 + 1)] = ws[k].Cells[2 + l - 1, 6];   //set row 31 to (31+57) respectivley to each worksheets row 2 to 56     //do it for columns 6-10
-              //    ws26.Cells[30 + l, ((k - 1) * 6 + 2)] = ws[k].Cells[2 + l - 1, 7];   //set row 31 to (31+57) respectivley to each worksheets row 2 to 56     //set column 0-5 on ws26  to  column 6 to 10 for each sheet
-              //    ws26.Cells[30 + l, ((k - 1) * 6 + 3)] = ws[k].Cells[2 + l - 1, 8];   //set row 31 to (31+57) respectivley to each worksheets row 2 to 56     //set column 0-5 on ws26  to  column 6 to 10 for each sheet
-              //    ws26.Cells[30 + l, ((k - 1) * 6 + 4)] = ws[k].Cells[2 + l - 1, 9];   //set row 31 to (31+57) respectivley to each worksheets row 2 to 56     //set column 0-5 on ws26  to  column 6 to 10 for each sheet
-              //    ws26.Cells[30 + l, ((k - 1) * 6 + 5)] = ws[k].Cells[2 + l - 1, 10];   //set row 31 to (31+57) respectivley to each worksheets row 2 to 56     //set column 0-5 on ws26  to  column 6 to 10 for each sheet
-              //
-              //    
-              //
-              //
-              // 
-              //
-              //
-              //}
+             
 
                 //Copy data from each sheet to a main sheet
                 //string columnLetter = ColumnIndexToColumnLetter(100); // returns "CV"
@@ -842,25 +908,50 @@ namespace UART_Senior_Design_Test
                 ws26.Cells[30, (k - 1) * 11 + 5] =  "Freq";
                 ws26.Cells[30, (k - 1) * 11 + 6] =  "|Z|";
                 ws26.Cells[30, (k - 1) * 11 + 7] =  "Z Phase";
+
+
                 
+
+
 
             }
 
+                                                                                            //set the range to my data array 
 
-           //Excel.Range border_rng1_26 = ws26.Range["A31:ET57"];       //all
-           //Excel.Range border_rng2_26 = ws26.Range["A30:ET30"];       //All heading
-           //Excel.Borders border1_26 = border_rng1_26.Borders;
-           //border1_26.LineStyle = Excel.XlLineStyle.xlContinuous;
-           //border1_26.Weight = Excel.XlBorderWeight.xlThick;
-           //border1_26.Color = Color.Red;
-           //Excel.Borders border2_26 = border_rng2_26.Borders;
-           //border2_26.LineStyle = Excel.XlLineStyle.xlContinuous;
-           //border2_26.Weight = Excel.XlBorderWeight.xlThick;
-           //border2_26.Color = Color.Blue;
 
-           
-        
+            //Excel.Range border_rng1_26 = ws26.Range["A31:ET57"];       //all
+            //Excel.Range border_rng2_26 = ws26.Range["A30:ET30"];       //All heading
+            //Excel.Borders border1_26 = border_rng1_26.Borders;
+            //border1_26.LineStyle = Excel.XlLineStyle.xlContinuous;
+            //border1_26.Weight = Excel.XlBorderWeight.xlThick;
+            //border1_26.Color = Color.Red;
+            //Excel.Borders border2_26 = border_rng2_26.Borders;
+            //border2_26.LineStyle = Excel.XlLineStyle.xlContinuous;
+            //border2_26.Weight = Excel.XlBorderWeight.xlThick;
+            //border2_26.Color = Color.Blue;
+
+
+
         }
+
+        private string getSectionOfSweep(int m)
+        {
+            if (m == 1)
+                return "1-10Hz";
+            else if (m == 2)
+                return "10-100Hz";
+            else if (m == 3)
+                return "100-1kHz";
+            else if (m == 4)
+                return "1k-10kHz";
+            else if (m == 5)
+                return "10k-100kHz";
+            else if (m == 6)
+                return "100k-200kHz";
+            else
+                return "didnt find it";
+        }
+
         private void button3_Click_1(object sender, EventArgs e)                               //Send to EXCEL 
         {
             //  using (Form3 frm = new Form3())
@@ -897,12 +988,6 @@ namespace UART_Senior_Design_Test
            // MessageBox.Show("Allow extra time wihen the Excel Sheet loads to allow Excel to finish buffering");
             SaveData();
 
-            
-
-          //  using (Form3 frm = new Form3())
-          //  {
-          //      frm.Hide();
-          //  }
         }
         static string ColumnIndexToColumnLetter(int colIndex)
         {
