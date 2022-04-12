@@ -46,6 +46,8 @@ namespace UART_Senior_Design_Test
         char switch1, switch2, switch3, switch4;
         int btn_count = 0;
 
+        bool busy = false;
+
         private Bluetooth_Settings _setting = new Bluetooth_Settings();                        //create an instance of the Bluetooth_Settings
         private Form4 _helpmenue = new Form4();
         public string frequency;
@@ -156,13 +158,6 @@ namespace UART_Senior_Design_Test
                 this.Invoke(new EventHandler(Parse_My_Data), new object[] { indata });
             }
 
-
-            // if (sp.BytesToRead > 0)
-            // {
-            //     byte[] buffer = new byte[10000];
-            //     int count = sp.Read(buffer, 0, 10000);
-            //     Extract_each_Character(buffer, count);                                                          //call the function to exract each character
-            // }
         }
         private void Parse_My_Data(object sender, EventArgs e)                                 //parse the incoming data into an array
         {
@@ -285,69 +280,154 @@ namespace UART_Senior_Design_Test
         }
         private void DataReceivedHandler2(object sender, SerialDataReceivedEventArgs e)        //data recieved handler for Serial Port2
         {
-            SerialPort sp2 = (SerialPort)sender;
-            if (sp2.BytesToRead > 0)
+            string indata;
+            SerialPort sp = (SerialPort)sender;
+            while (sp.ReadBufferSize != 0)
             {
-                byte[] buffer = new byte[sp2.BytesToRead];
-                int count = sp2.Read(buffer, 0, sp2.BytesToRead);
-                Extract_each_Character2(buffer, count);                                        //call the function to exract each character
+                indata = sp.ReadLine();
+                this.Invoke(new EventHandler(remote_handler), new object[] { indata });
             }
         }
-
-        private void Extract_each_Character2(byte[] buffer, int count)                         //extract characters from the 2 serial port and Proccess the controls as needed
+        private void remote_handler(object sender, EventArgs e)
         {
-            bool recordFreq = false;
-            string freq = "";
-            int data2_int; ;
+            int frequency = 0;
+            int sweepRange = 0;
+            string data = (string)sender;
 
-            byte data2;
+            char command = data[0];
 
-            for (int i = 0; i < count; i++)                                                        //start to pasrse the received data
+            data = data.Remove(0, 1);
+            if(busy)
             {
-                data2 = buffer[i];
-                this.Invoke(new EventHandler(update_richtextbox6), new object[] { data2 });        //send the received data to a textbox for debudding purposes
-
-                if (data2 == ')')                                                                  //STOP bit control
-                {
-                    recordFreq = false;                                                            //stop recording state
-                }
-                if (data2 == '(')                                                                  //START bit control
-                {
-                    recordFreq = true;                                                             //start recording state
-                }
-                else if (recordFreq)                                                               //start saving the data
-                {
-                    data2_int = data2 - 48;                                                        //convert the incomming data byte to integer value
-                    freq = freq + Convert.ToString(data2_int);                                     //append the integer values to a string
-                }
-
-                if (data2 == '!')                                                                  //if we recieve this control from the SerialPort 2 - then call a respective function
-                {
-
-                    TakeOneSamplePort2(freq);                                                      //calling the function is more reliable than envokeing that event that does the same function
-                    freq = "";                                                                     //reset the string to a null string
-                                                                                                   //we will eventually implement a Protocol that will pass is the parameters that need to be set for each function 
-
-                }
-                else if (data2 == '@')                                                                      //just another example of another control flag
-                {
-                    //ExampleFunction2();                                                                   //if we recieve this control from the SerialPort 2 - then call this function
-                }                                                         //if we recieve this control from the SerialPort 2 - then call a respective function
-                else if (data2 == '#')                                                                      //just another example of another control flag
-                {
-                    //ExampleFunction2();                                                                   //if we recieve this control from the SerialPort 2 - then call this function
-                }                                                         //if we recieve this control from the SerialPort 2 - then call a respective function
-                else if (data2 == '$')                                                                      //just another example of another control flag
-                {
-                    //ExampleFunction2();                                                                   //if we recieve this control from the SerialPort 2 - then call this function
-                }                                                         //if we recieve this control from the SerialPort 2 - then call a respective function
-                if (data2 == '%')                                                                          //just another example of another control flag
-                {
-                    //ExampleFunction2();                                                                   //if we recieve this control from the SerialPort 2 - then call this function
-                }                                                              //if we recieve this control from the SerialPort 2 - then call a respective function
+                sendBusyRemote();
+            }
+            if (command == 'F') //Single Frequency
+            {
+                frequency = Convert.ToInt32(data);
+                //TakeOneSamplePort2(data);
+                //_setting._serial2.Write("We got " + Convert.ToString(frequency) + "#");
 
             }
+            else if(command == 'S') //Sweep Frequency
+            {
+                sweepRange = Convert.ToInt32(data);
+                sendSweep(sweepRange);
+            }
+            else if(command == 'E') //Entire Range
+            {
+                sendEntirerange();
+            }
+            else if(command == 'C')
+            {
+                richTextBox1.Clear();
+            }
         }
+        public void TakeOneSamplePort2(string frequencyPassedIn)
+        {
+            string freq = frequencyPassedIn;
+
+            char[] sendToChip = new char[1];
+            //frequency = richTextBox4.Text;
+
+            //richTextBox1.AppendText(Convert.ToString(richTextBox4.Text[0]));
+
+            sendToChip[0] = 'F';
+            _setting._serial.Write(sendToChip, 0, 1);
+
+            quickPause();
+
+            for (int i = 0; i < freq.Length; i++)
+            {
+                sendToChip[0] = Convert.ToChar(freq[i]);
+                _setting._serial.Write(sendToChip, 0, 1);
+                quickPause();
+            }
+
+            sendToChip[0] = 'F';
+            _setting._serial.Write(sendToChip, 0, 1);
+            quickPause();
+
+            sendToChip[0] = 'H';
+            _setting._serial.Write(sendToChip, 0, 1);
+        }
+        public void sendSweep(int sweepType)
+        {
+            char[] sendToChip = new char[1];
+
+            switch (sweepType)
+            {
+                case 1://"1 - 200k Hz"
+                    {
+                        sendToChip[0] = '!';
+                        _setting._serial.Write(sendToChip, 0, 1);
+                        quickPause();
+                        break;
+                    }
+                case 2: //"1 - 10 Hz"
+                    {
+                        sendToChip[0] = '@';
+                        _setting._serial.Write(sendToChip, 0, 1);
+                        quickPause();
+                        break;
+                    }
+                case 3: //"10 - 100 Hz"
+                    {
+                        sendToChip[0] = '#';
+                        _setting._serial.Write(sendToChip, 0, 1);
+                        quickPause();
+                        break;
+                    }
+                case 4: //"100 - 1k Hz"
+                    {
+                        sendToChip[0] = '(';
+                        _setting._serial.Write(sendToChip, 0, 1);
+                        quickPause();
+                        break;
+                    }
+                case 5: //"1k - 10k Hz"
+                    {
+                        sendToChip[0] = '%';
+                        _setting._serial.Write(sendToChip, 0, 1);
+                        quickPause();
+                        break;
+                    }
+                case 6: //"10k - 100k Hz"
+                    {
+                        sendToChip[0] = '^';
+                        _setting._serial.Write(sendToChip, 0, 1);
+                        quickPause();
+                        break;
+                    }
+                case 7: //"100k - 200k Hz"
+                    {
+                        sendToChip[0] = '&';
+                        _setting._serial.Write(sendToChip, 0, 1);
+                        quickPause();
+                        break;
+                    }
+                default:
+                    {
+                        MessageBox.Show("A Sweep Was Not Sent To MCU");
+                        break;
+                    }
+            }
+        }
+
+        private void sendBusyRemote()
+        {
+            char[] sendToChip = new char[1];
+            sendToChip[0] = '!';
+            _setting._serial2.Write(sendToChip, 0, 1);
+        }
+
+        private void sendEntirerange()
+        {
+            char[] sendToChip = new char[1];
+            sendToChip[0] = 'E';
+            _setting._serial.Write(sendToChip, 0, 1);
+            quickPause();
+        }
+
         private void Extract_each_Character(byte[] buffer, int count)                          //extract characters from the 1 serial port and proccess the data as needed
         {
             byte data;
@@ -1760,6 +1840,22 @@ namespace UART_Senior_Design_Test
             DrawSine();
         }
 
+        private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _setting._serial.Close();
+                _setting._serial2.Close();
+                toolStripProgressBar1.Value = 0;
+                toolStripStatusLabel1.Text = "Bluetooth Connection";
+                toolStripStatusLabel1.BackColor = Color.Black;
+            }
+            catch
+            {
+
+            }
+        }
+
         private void button5_Click(object sender, EventArgs e)
         {
             char[] sendToChip = new char[1];
@@ -2168,34 +2264,7 @@ namespace UART_Senior_Design_Test
         /// This is a function that takes one sample at the frequency that is specified from the serial Port 2
         /// It sends the data to serial port 1 (3029MCU)
         /// </summary>
-        public void TakeOneSamplePort2(string frequencyPassedIn)
-        {
-            string freq = frequencyPassedIn;
-
-            char[] sendToChip = new char[1];
-            //frequency = richTextBox4.Text;
-
-            //richTextBox1.AppendText(Convert.ToString(richTextBox4.Text[0]));
-
-            sendToChip[0] = 'F';
-            _setting._serial.Write(sendToChip, 0, 1);
-
-            quickPause();
-
-            for (int i = 0; i < freq.Length; i++)
-            {
-                sendToChip[0] = Convert.ToChar(freq[i]);
-                _setting._serial.Write(sendToChip, 0, 1);
-                quickPause();
-            }
-
-            sendToChip[0] = 'F';
-            _setting._serial.Write(sendToChip, 0, 1);
-            quickPause();
-
-            sendToChip[0] = 'H';
-            _setting._serial.Write(sendToChip, 0, 1);
-        }
+        
 
 
         private void releaseObject(object obj)
