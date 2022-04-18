@@ -38,7 +38,7 @@ namespace UART_Senior_Design_Test
         double[,] data_array1 = new double[xl_length, xl_width];
         double[,] data_array2 = new double[xl_length, xl_width];
         double[,] data_array3 = new double[xl_length, xl_width];
-        double[,] average_data_array = new double[3, 200];
+        double[,] average_data_array = new double[2, 200];
         
 
         int r = 1, c = 0, sheet_count = 0;
@@ -809,34 +809,6 @@ namespace UART_Senior_Design_Test
                 {
 
 
-                    //set each column of the averagedataarray respectiveley. 
-                    for (int n = 0; n < 10; n++)
-                    {
-                        average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 5];                   //take the summation f the Volt Mag
-                        average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 6];                  //take the summation of the Volt phase
-                        average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 7];                  //take the summation of the Current Mag
-                        average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 8];                   //take the summation  of the Current phase
-                        average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 10];                  //take the summation  of the Z Magnitude 
-                        average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 11];                  //take the summation  of the Z phase
-
-                        wsML.Columns[(m * 6 - 5) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 4) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 3) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 2) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 1) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 0) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-
-                        if (n == 9)
-                        {
-                            average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] / n + 1;        //take the average of the Volt Mag
-                            average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] / n + 1;        //take the average of the Volt phase
-                            average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] / n + 1;        //take the average of the Current Mag
-                            average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] / n + 1;        //take the average of the Current phase
-                            average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] / n + 1;        //take the average of the Z Magnitude 
-                            average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] / n + 1;        //take the average of the Z phase
-                        }
-                    }
-
                     string section;
                     section = getSectionOfSweep(m);
                     wsML.Cells[3, (m * 6 - 5) + (30 * (k - 1)) + 1] = "avg |V|" + section;
@@ -866,6 +838,35 @@ namespace UART_Senior_Design_Test
                     }
 
 
+
+                    //set each column of the averagedataarray respectiveley. 
+                    for (int n = 0; n < 10; n++)
+                    {
+
+                        average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 5];                   //take the summation f the Volt Mag
+                        average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 6];                  //take the summation of the Volt phase
+                        average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 7];                  //take the summation of the Current Mag
+                        average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 8];                   //take the summation  of the Current phase
+                        average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 10];                  //take the summation  of the Z Magnitude 
+                        average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 11];                  //take the summation  of the Z phase
+
+                        wsML.Columns[(m * 6 - 5) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 4) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 3) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 2) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 1) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                        wsML.Columns[(m * 6 - 0) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+
+                        
+                    }
+                    {
+                        average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] / 10;        //take the average of the Volt Mag
+                        average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] / 10;        //take the average of the Volt phase
+                        average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] / 10;        //take the average of the Current Mag
+                        average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] / 10;        //take the average of the Current phase
+                        average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] / 10;        //take the average of the Z Magnitude 
+                        average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] / 10;        //take the average of the Z phase
+                    }
                 }
 
 
@@ -927,7 +928,7 @@ namespace UART_Senior_Design_Test
                     //Plot the magnitude////////////////////plot it on its own sheet. and also print it on the sheet with all of the plots/////////////
                     Excel.ChartObjects xlCharts = (Excel.ChartObjects)ws[k].ChartObjects(Type.Missing);
                     Excel.ChartObject myChart = (Excel.ChartObject)xlCharts.Add(700, 80, 600, 400);
-                    Excel.Range oRng = ws[k].get_Range("I1", "I60");
+                    Excel.Range oRng = ws[k].get_Range("K1", "K60");
                     Excel.Chart ct = myChart.Chart;
                     var missing = System.Type.Missing;
                     ct.ChartWizard(oRng, Excel.XlChartType.xl3DLine, Excel.XlScaleType.xlScaleLogarithmic);
@@ -943,7 +944,7 @@ namespace UART_Senior_Design_Test
                     //Plot the Phase///////////////////
                     Excel.ChartObjects xlCharts2 = (Excel.ChartObjects)ws[k].ChartObjects(Type.Missing);
                     Excel.ChartObject myChart2 = (Excel.ChartObject)xlCharts.Add(700, 480, 600, 400);
-                    Excel.Range oRng2 = ws[k].get_Range("J1", "J60"); ;
+                    Excel.Range oRng2 = ws[k].get_Range("L1", "L60"); ;
                     Excel.Chart ct2 = myChart2.Chart;
                     ct2.ChartWizard(oRng2, Excel.XlChartType.xl3DLine, Excel.XlScaleType.xlScaleLogarithmic);
                     Excel.Series oSeries2 = (Excel.Series)ct2.SeriesCollection(1);
@@ -959,7 +960,7 @@ namespace UART_Senior_Design_Test
                 //Plot the magnitude////////////////////plot it on its own sheet. and also print it on the sheet with all of the plots/////////////
                 Excel.ChartObjects xlCharts26 = (Excel.ChartObjects)ws26.ChartObjects(Type.Missing);
                 Excel.ChartObject myChart26 = (Excel.ChartObject)xlCharts26.Add((0 + k - 1) * 290, 0, 350, 200);
-                Excel.Range oRng26 = ws[k].get_Range("I1", "I60");
+                Excel.Range oRng26 = ws[k].get_Range("K1", "K60");
                 Excel.Chart ct26 = myChart26.Chart;
                 ct26.ChartWizard(oRng26, Excel.XlChartType.xl3DLine, Excel.XlScaleType.xlScaleLogarithmic);
                 Excel.Series oSeries26 = (Excel.Series)ct26.SeriesCollection(1);
@@ -973,7 +974,7 @@ namespace UART_Senior_Design_Test
                 //Now plot the Phase
                 Excel.ChartObjects xlCharts2_26 = (Excel.ChartObjects)ws26.ChartObjects(Type.Missing);
                 Excel.ChartObject myChart2_26 = (Excel.ChartObject)xlCharts2_26.Add((0 + k - 1) * 290, 200, 350, 200);
-                Excel.Range oRng2_26 = ws[k].get_Range("J1", "J60");
+                Excel.Range oRng2_26 = ws[k].get_Range("L1", "L60");
                 Excel.Chart ct2_26 = myChart2_26.Chart;
                 ct2_26.ChartWizard(oRng2_26, Excel.XlChartType.xl3DLine, Excel.XlScaleType.xlScaleLogarithmic);
                 Excel.Series oSeries2_26 = (Excel.Series)ct2_26.SeriesCollection(1);
