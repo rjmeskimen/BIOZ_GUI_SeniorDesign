@@ -39,6 +39,7 @@ namespace UART_Senior_Design_Test
         double[,] data_array2 = new double[xl_length, xl_width];
         double[,] data_array3 = new double[xl_length, xl_width];
         double[,] average_data_array = new double[2, 200];
+        //tyelr
         
 
         int r = 1, c = 0, sheet_count = 0;
