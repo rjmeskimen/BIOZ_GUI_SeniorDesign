@@ -282,11 +282,19 @@ namespace UART_Senior_Design_Test
         {
             string indata;
             SerialPort sp = (SerialPort)sender;
-            while (sp.ReadBufferSize != 0)
+            try
             {
-                indata = sp.ReadLine();
-                this.Invoke(new EventHandler(remote_handler), new object[] { indata });
+                while (sp.ReadBufferSize != 0)
+                {
+                    indata = sp.ReadLine();
+                    this.Invoke(new EventHandler(remote_handler), new object[] { indata });
+                }
             }
+            catch
+            {
+
+            }
+            
         }
         private void remote_handler(object sender, EventArgs e)
         {
@@ -304,7 +312,7 @@ namespace UART_Senior_Design_Test
             if (command == 'F') //Single Frequency
             {
                 frequency = Convert.ToInt32(data);
-                //TakeOneSamplePort2(data);
+                TakeOneSamplePort2(data);
                 //_setting._serial2.Write("We got " + Convert.ToString(frequency) + "#");
 
             }
@@ -430,14 +438,22 @@ namespace UART_Senior_Design_Test
 
         private void Extract_each_Character(byte[] buffer, int count)                          //extract characters from the 1 serial port and proccess the data as needed
         {
-            byte data;
-            for (int i = 0; i < count; i++)
+            try
             {
-                data = buffer[i];
-                //Selects 
-                this.Invoke(new EventHandler(update_richtextbox1), new object[] { data });
-                this.Invoke(new EventHandler(Parse_My_Data), new object[] { data });
+                byte data;
+                for (int i = 0; i < count; i++)
+                {
+                    data = buffer[i];
+                    //Selects 
+                    this.Invoke(new EventHandler(update_richtextbox1), new object[] { data });
+                    this.Invoke(new EventHandler(Parse_My_Data), new object[] { data });
+                }
             }
+            catch
+            {
+
+            }
+           
         }
         
         private void update_richtextbox6(object sender, EventArgs e)                           //update when Data is recieved from Serial Port2
