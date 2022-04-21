@@ -35,10 +35,11 @@ namespace UART_Senior_Design_Test
 
         double[] Data_Array = new double[24];
         double[,] data_array = new double[(xl_length * 24) + 1, xl_width];
-        double[,] data_array1 = new double[xl_length, xl_width];
-        double[,] data_array2 = new double[xl_length, xl_width];
-        double[,] data_array3 = new double[xl_length, xl_width];
-        double[,] average_data_array = new double[2, 200];
+        double[,] data_array1 = new double[xl_length+5, xl_width];
+        double[,] data_array2 = new double[xl_length+5, xl_width];
+        double[,] data_array3 = new double[xl_length+5, xl_width];
+        double[,] average_data_array = new double[1, 400];
+        //tyelr
         
 
         int r = 1, c = 0, sheet_count = 0;
@@ -808,34 +809,26 @@ namespace UART_Senior_Design_Test
                 for (int m = 1; m < 6; m++)
                 {
 
-
-                    string section;
-                    section = getSectionOfSweep(m);
-                    wsML.Cells[3, (m * 6 - 5) + (30 * (k - 1)) + 1] = "avg |V|" + section;
-                    wsML.Cells[3, (m * 6 - 4) + (30 * (k - 1)) + 1] = "avg V phase " + section;
-                    wsML.Cells[3, (m * 6 - 3) + (30 * (k - 1)) + 1] = "avg |I| " + section;
-                    wsML.Cells[3, (m * 6 - 2) + (30 * (k - 1)) + 1] = "avg I Phase " + section;
-                    wsML.Cells[3, (m * 6 - 1) + (30 * (k - 1)) + 1] = "avg |Z| " + section;
-                    wsML.Cells[3, (m * 6 - 0) + (30 * (k - 1)) + 1] = "avg Z Phase " + section;
+                 
 
                     //add border to the ML sheet
-                    {
-                        string columnLetter3 = ColumnIndexToColumnLetter((m - 1) * 12 + 2); // returns the column string value
-                        string columnLetter4 = ColumnIndexToColumnLetter((m - 1) * 12 + 7); // returns the column string value
-                        Excel.Range ml_border_range = wsML.get_Range(columnLetter3 + "2", columnLetter4 + "3");
-                        Excel.Borders borderML = ml_border_range.Borders;
-                        borderML.LineStyle = Excel.XlLineStyle.xlContinuous;
-                        borderML.Weight = Excel.XlBorderWeight.xlThick;
-                        borderML.Color = Color.Blue;
-
-                        string columnLetter5 = ColumnIndexToColumnLetter((m - 1) * 12 + 8); // returns the column string value
-                        string columnLetter6 = ColumnIndexToColumnLetter((m - 1) * 12 + 13); // returns the column string value
-                        Excel.Range ml_border_range2 = wsML.get_Range(columnLetter5 + "2", columnLetter6 + "3");
-                        Excel.Borders borderML2 = ml_border_range2.Borders;
-                        borderML2.LineStyle = Excel.XlLineStyle.xlContinuous;
-                        borderML2.Weight = Excel.XlBorderWeight.xlThick;
-                        borderML2.Color = Color.Black;
-                    }
+                  // {
+                  //     string columnLetter3 = ColumnIndexToColumnLetter((m - 1) * 12 + 2); // returns the column string value
+                  //     string columnLetter4 = ColumnIndexToColumnLetter((m - 1) * 12 + 7); // returns the column string value
+                  //     Excel.Range ml_border_range = wsML.get_Range(columnLetter3 + "2", columnLetter4 + "3");
+                  //     Excel.Borders borderML = ml_border_range.Borders;
+                  //     borderML.LineStyle = Excel.XlLineStyle.xlContinuous;
+                  //     borderML.Weight = Excel.XlBorderWeight.xlThick;
+                  //     borderML.Color = Color.Blue;
+                  //
+                  //     string columnLetter5 = ColumnIndexToColumnLetter((m - 1) * 12 + 8); // returns the column string value
+                  //     string columnLetter6 = ColumnIndexToColumnLetter((m - 1) * 12 + 13); // returns the column string value
+                  //     Excel.Range ml_border_range2 = wsML.get_Range(columnLetter5 + "2", columnLetter6 + "3");
+                  //     Excel.Borders borderML2 = ml_border_range2.Borders;
+                  //     borderML2.LineStyle = Excel.XlLineStyle.xlContinuous;
+                  //     borderML2.Weight = Excel.XlBorderWeight.xlThick;
+                  //     borderML2.Color = Color.Black;
+                  // }
 
 
 
@@ -843,30 +836,32 @@ namespace UART_Senior_Design_Test
                     for (int n = 0; n < 10; n++)
                     {
 
-                        average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 5];                   //take the summation f the Volt Mag
-                        average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 6];                  //take the summation of the Volt phase
-                        average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 7];                  //take the summation of the Current Mag
-                        average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 8];                   //take the summation  of the Current phase
-                        average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 10];                  //take the summation  of the Z Magnitude 
-                        average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 11];                  //take the summation  of the Z phase
+                       //average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 5];                   //take the summation f the Volt Mag
+                       //average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 6];                  //take the summation of the Volt phase
+                       //average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 7];                  //take the summation of the Current Mag
+                       //average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 8];                   //take the summation  of the Current phase
+                        average_data_array[0, (m * 2 - 1) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 10];                  //take the summation  of the Z Magnitude 
+                        average_data_array[0, (m * 2 - 0) + (30 * (k - 1))] += data_array1[(m - 1) * 10 + n + 1, 11];                  //take the summation  of the Z phase
 
-                        wsML.Columns[(m * 6 - 5) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 4) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 3) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 2) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 1) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
-                        wsML.Columns[(m * 6 - 0) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                     //   wsML.Columns[(m * 6 - 5) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                     //   wsML.Columns[(m * 6 - 4) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                     //   wsML.Columns[(m * 6 - 3) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                     //   wsML.Columns[(m * 6 - 2) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                     //   wsML.Columns[(m * 6 - 1) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
+                     //   wsML.Columns[(m * 6 - 0) + (30 * (k - 1))].ColumnWidth = 18;                                        //set the width of the columns
 
                         
                     }
                     {
-                        average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] / 10;        //take the average of the Volt Mag
-                        average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] / 10;        //take the average of the Volt phase
-                        average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] / 10;        //take the average of the Current Mag
-                        average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] / 10;        //take the average of the Current phase
-                        average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 1) + (30 * (k - 1))] / 10;        //take the average of the Z Magnitude 
-                        average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 0) + (30 * (k - 1))] / 10;        //take the average of the Z phase
+                       // average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 5) + (30 * (k - 1))] / 10;        //take the average of the Volt Mag
+                       // average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 4) + (30 * (k - 1))] / 10;        //take the average of the Volt phase
+                       // average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 3) + (30 * (k - 1))] / 10;        //take the average of the Current Mag
+                       // average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] = average_data_array[1, (m * 6 - 2) + (30 * (k - 1))] / 10;        //take the average of the Current phase
+                        average_data_array[0, (m * 2 - 1) + (30 * (k - 1))] = average_data_array[0, (m * 2 - 1) + (30 * (k - 1))] / 10;        //take the average of the Z Magnitude 
+                        average_data_array[0, (m * 2 - 0) + (30 * (k - 1))] = average_data_array[0, (m * 2 - 0) + (30 * (k - 1))] / 10;        //take the average of the Z phase
                     }
+
+                    
                 }
 
 
@@ -878,6 +873,8 @@ namespace UART_Senior_Design_Test
                 //instantiate a range for the average data set
                 Excel.Range avg_rng = wsML.Cells.get_Resize(average_data_array.GetLength(0), average_data_array.GetLength(1));       //get the range
                 avg_rng.Value = average_data_array;
+
+                
 
 
 
@@ -933,7 +930,7 @@ namespace UART_Senior_Design_Test
                     var missing = System.Type.Missing;
                     ct.ChartWizard(oRng, Excel.XlChartType.xl3DLine, Excel.XlScaleType.xlScaleLogarithmic);
                     Excel.Series oSeries = (Excel.Series)ct.SeriesCollection(1);
-                    oSeries.XValues = ws[k].get_Range("H2", "H60");
+                    oSeries.XValues = ws[k].get_Range("J2", "J60");
                     //Microsoft.Office.Interop.Excel.XlScaleType ScaleType = Excel.XlScaleType.xlScaleLogarithmic;
 
                     ct.HasTitle = true;
@@ -948,7 +945,7 @@ namespace UART_Senior_Design_Test
                     Excel.Chart ct2 = myChart2.Chart;
                     ct2.ChartWizard(oRng2, Excel.XlChartType.xl3DLine, Excel.XlScaleType.xlScaleLogarithmic);
                     Excel.Series oSeries2 = (Excel.Series)ct2.SeriesCollection(1);
-                    oSeries2.XValues = ws[k].get_Range("H2", "H60");
+                    oSeries2.XValues = ws[k].get_Range("J2", "J60");
                     ct2.HasTitle = true;
                     ct2.ChartTitle.Text = "Phase vs Frequency";
                     ct2.Refresh();
@@ -964,7 +961,7 @@ namespace UART_Senior_Design_Test
                 Excel.Chart ct26 = myChart26.Chart;
                 ct26.ChartWizard(oRng26, Excel.XlChartType.xl3DLine, Excel.XlScaleType.xlScaleLogarithmic);
                 Excel.Series oSeries26 = (Excel.Series)ct26.SeriesCollection(1);
-                oSeries26.XValues = ws[k].get_Range("H2", "H60");
+                oSeries26.XValues = ws[k].get_Range("J2", "J60");
                 //Microsoft.Office.Interop.Excel.XlScaleType ScaleType = Excel.XlScaleType.xlScaleLogarithmic;
                 ct26.HasTitle = true;
                 ct26.ChartTitle.Text = "Magnitude vs Frequency " + electrode_label;
@@ -978,7 +975,7 @@ namespace UART_Senior_Design_Test
                 Excel.Chart ct2_26 = myChart2_26.Chart;
                 ct2_26.ChartWizard(oRng2_26, Excel.XlChartType.xl3DLine, Excel.XlScaleType.xlScaleLogarithmic);
                 Excel.Series oSeries2_26 = (Excel.Series)ct2_26.SeriesCollection(1);
-                oSeries2_26.XValues = ws[k].get_Range("H2", "H60");
+                oSeries2_26.XValues = ws[k].get_Range("J2", "J60");
                 ct2_26.HasTitle = true;
                 ct2_26.ChartTitle.Text = "Phase vs Frequency" + electrode_label;
                 ct2_26.Refresh();
@@ -1007,7 +1004,20 @@ namespace UART_Senior_Design_Test
                 ws26.Cells[30, (k - 1) * 11 + 6] = "|Z|";
                 ws26.Cells[30, (k - 1) * 11 + 7] = "Z Phase";
 
+                for (int m = 1; m < 6; m++)
+                {
 
+
+                    string section;
+                    section = getSectionOfSweep(m);
+
+                    //wsML.Cells[3, (m * 6 - 5) + (30 * (k - 1)) + 1] = "avg |V|" + section;
+                    //wsML.Cells[3, (m * 6 - 4) + (30 * (k - 1)) + 1] = "avg V phase " + section;
+                    //wsML.Cells[3, (m * 6 - 3) + (30 * (k - 1)) + 1] = "avg |I| " + section;
+                    //wsML.Cells[3, (m * 6 - 2) + (30 * (k - 1)) + 1] = "avg I Phase " + section;
+                    wsML.Cells[2, (m * 2 - 1) + (30 * (k - 1)) + 1] = "avg |Z| " + section;
+                    wsML.Cells[2, (m * 2 - 0) + (30 * (k - 1)) + 1] = "avg Z Phase " + section;
+                }
 
 
 
@@ -1967,6 +1977,9 @@ namespace UART_Senior_Design_Test
         {
             char[] sendToChip = new char[1];
             frequency = richTextBox4.Text;
+            string dac_offset = richTextBox2.Text;
+
+
 
             //error handling, the pk-pk for the dac has to be: ((dac pk-pk) * (dac buffer) <= 1800mv
             if (Convert.ToDouble(pk2pk_textbox.Text) * dacgain   > 1799)
@@ -2017,6 +2030,21 @@ namespace UART_Senior_Design_Test
                     _setting._serial.Write(sendToChip, 0, 1);
                     quickPause();
                 }
+
+                {
+                    sendToChip[0] = ',';                            //send the seperating
+                    _setting._serial.Write(sendToChip, 0, 1);
+                    quickPause();
+                }
+
+                //now send the offset value
+                for (int i = 0; i < richTextBox2.TextLength; i++)
+                {
+                    sendToChip[0] = Convert.ToChar(richTextBox2.Text[i]);
+                    _setting._serial.Write(sendToChip, 0, 1);
+                    quickPause();
+                }
+
 
                 //send stop recording control key to end recording
                 {
